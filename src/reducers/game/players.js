@@ -34,7 +34,8 @@ const players = (state = [], action) => {
       playerIndex = state.findIndex(player => player.id === action.id);
       player = state[playerIndex];
 
-      hand = [...player.cards.deck].slice(0, 5);
+      // hand = [...player.cards.deck].slice(0, 5);
+      hand = ["Silver", "Silver", "Copper", "Silver", "Merchant"];
       deck = [...player.cards.deck].slice(5);
       discard = [
         ...player.cards.discard,
@@ -59,7 +60,8 @@ const players = (state = [], action) => {
       playerIndex = state.findIndex(player => player.id === action.id);
       player = state[playerIndex];
       cardIndex = player.cards.hand.findIndex(c => c === action.cardName);
-
+      console.log("[PLAY]", action);
+      console.log("[PLAY]", player.cards.inplay);
       return [
         ...state.slice(0, playerIndex),
         {

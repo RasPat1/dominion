@@ -23,7 +23,7 @@ const app = express(),
   compiler = webpack(config);
 
 expressWs(app);
-app.ws("/dominion", function(ws, req) {
+app.ws("/dominion", function (ws, req) {
   const connectionId = uuid.v4();
   const unsubscribe = store.subscribe(() => {
     const state = store.getState();
@@ -42,15 +42,17 @@ app.ws("/dominion", function(ws, req) {
   const username = url.searchParams.get("username");
   store.dispatch(asyncAddConnection({ ws, id: connectionId, username }));
 
-  ws.on("message", function(msg) {
+  ws.on("message", function (msg) {
+    console.log("MSG", msg);
     const msgObj = JSON.parse(msg);
     if (isEmpty(msgObj)) {
+      console.log("returning");
       return;
     }
     store.dispatch({ ...msgObj, id: connectionId });
   });
 
-  ws.on("close", function() {
+  ws.on("close", function () {
     unsubscribe();
     store.dispatch(asyncRemoveConnection(connectionId));
   });

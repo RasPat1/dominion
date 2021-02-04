@@ -149,23 +149,37 @@ export function* asyncPlayCard({ id, name: cardName }) {
   const currentPlayer = yield select(currentPlayerSelector);
   const player = yield select(gamePlayerSelector);
   const playerRequest = yield select(gamePlayerRequestSelector);
+  console.log("Stage 1");
+  console.log("Current Player", currentPlayer);
+  console.log("Player Object", player);
+  console.log("Player Request", playerRequest);
+  console.log("id", id);
+  console.log("cardName", cardName);
+  console.log("Condition 1", player.id !== id, playerRequest, VICTORY_AND_CURSE_CARDS.includes(cardName),
+    !ACTION_CARDS.includes(cardName));
   if (
     player.id !== id ||
     playerRequest ||
     (VICTORY_AND_CURSE_CARDS.includes(cardName) &&
       !ACTION_CARDS.includes(cardName))
   ) {
+    console.log("Stage 2");
     return;
   }
+  console.log("Stage 3");
+  console.log("Condition 2", ACTION_CARDS.includes(cardName),
+    currentPlayer.actions <= 0,
+    TREASURE_CARDS.some(c => player.cards.inplay.includes(c)));
 
   if (
     ACTION_CARDS.includes(cardName) &&
     (currentPlayer.actions <= 0 ||
       TREASURE_CARDS.some(c => player.cards.inplay.includes(c)))
   ) {
+    console.log("Stage 4");
     return;
   }
-
+  console.log("Stage 5");
   yield put({ type: `ASYNC_PLAY_${snakeCase(cardName).toUpperCase()}` });
 }
 
